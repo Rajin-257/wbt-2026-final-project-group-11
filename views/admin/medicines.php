@@ -109,7 +109,7 @@
                         <td><?= htmlspecialchars($med['name']) ?></td>
                         <td><?= htmlspecialchars($med['category_name']) ?></td>
                         <td><?= htmlspecialchars($med['vendor_name']) ?></td>
-                        <td><?= $med['price'] ?> BDT</td>
+                        <td><?= $med['price'] ?> bdt</td>
                         <td><?= $med['availability'] ?></td>
                         <td>
                             <a href="index.php?page=admin/medicines&edit=<?= $med['id'] ?>"
