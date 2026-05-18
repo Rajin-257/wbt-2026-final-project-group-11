@@ -2,4 +2,10 @@
 
 require __DIR__ . '/controller/home.php';
 
-home_index();
+$page = $_GET['page'] ?? 'home';
+
+if ($page === 'register') {
+    register();
+} else {
+    home_index();
+}

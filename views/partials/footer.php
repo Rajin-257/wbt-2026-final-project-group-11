@@ -1,5 +1,5 @@
 <footer>
-    <p>Copyright <?php echo date('Y'); ?> Library Management System</p>
+    <p>Copyright <?php echo date('Y'); ?> Online Medicine Shop</p>
 </footer>
 </body>
 </html>

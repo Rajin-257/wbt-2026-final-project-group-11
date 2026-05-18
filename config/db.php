@@ -1,7 +1,7 @@
 <?php
 
     function getConnection() {
-        $conn = mysqli_connect('localhost', 'root', '', 'library_db');
+        $conn = mysqli_connect('localhost', 'root', '', 'medicine_db');
 
         if (!$conn) {
             die('Database connection failed: ' . mysqli_connect_error());
