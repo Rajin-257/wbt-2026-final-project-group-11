@@ -1,3 +1,6 @@
+CREATE DATABASE IF NOT EXISTS medicine_db;
+use medicine_db;
+
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -65,9 +68,7 @@ CREATE TABLE payments (
     payment_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
--- ---------------------------------------------------------------------------
--- Dummy data (all test accounts use password: password123)
--- ---------------------------------------------------------------------------
+-- Dummy data for testing
 
 INSERT INTO users (name, email, password_hash, role, address, phone) VALUES
 ('Admin User', 'admin@pharmacy.test', '$2y$10$5Xl7B8WoOQ3ipMQ2Lw8A8.80ayCRMiudhWR3bUyEccdtUW5aUnCRO', 'admin', '12 Admin Street, Dhaka', '01700000001'),
