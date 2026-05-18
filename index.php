@@ -8,7 +8,7 @@ $GLOBALS['page'] = $page;
 
 switch ($page) {
 
-    /* ── public auth ─────────────────────────────────────────────────────── */
+    /*  public auth  */
     case 'register':
         register();
         break;
@@ -21,12 +21,12 @@ switch ($page) {
         logout();
         break;
 
-    /* ── profile (session-gated, any role) ───────────────────────────────── */
+    /*  profile (session-gated, any role)  */
     case 'profile':
         profile();
         break;
 
-    /* ── admin pages ─────────────────────────────────────────────────────── */
+    /*  admin pages  */
     case 'admin/dashboard':
         require_once __DIR__ . '/controller/adminController.php';
         admin_dashboard();
@@ -64,7 +64,7 @@ switch ($page) {
         admin_order_update_status();
         break;
 
-    /* ── customer cart & checkout (Task 3) ───────────────────────────────── */
+    /*  customer cart & checkout (Task 3)  */
     case 'cart':
         require_once __DIR__ . '/controller/cartCheckout.php';
         cart_page();
@@ -95,7 +95,7 @@ switch ($page) {
         my_orders_page();
         break;
 
-    /* ── home / shop ─────────────────────────────────────────────────────── */
+    /*  home  */
     default:
         require_once __DIR__ . '/controller/shopController.php';
         shop_home();

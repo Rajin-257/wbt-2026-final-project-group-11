@@ -2,9 +2,9 @@
 
 require_once __DIR__ . '/../config/db.php';
 
-/* ─── CREATE ─────────────────────────────────────────────────────────────── */
+/* CREATE  */
 
-function user_create(array $data): bool|string
+function user_create(array $data)
 {
     $conn = getConnection();
 
@@ -20,12 +20,12 @@ function user_create(array $data): bool|string
     }
     mysqli_stmt_close($chk);
 
-    $name    = trim($data['name']);
-    $email   = trim($data['email']);
-    $hash    = password_hash($data['password'], PASSWORD_DEFAULT);
-    $role    = in_array($data['role'], ['admin', 'customer']) ? $data['role'] : 'customer';
+    $name = trim($data['name']);
+    $email= trim($data['email']);
+    $hash = password_hash($data['password'], PASSWORD_DEFAULT);
+    $role = in_array($data['role'], ['admin', 'customer']) ? $data['role'] : 'customer';
     $address = trim($data['address'] ?? '');
-    $phone   = trim($data['phone']   ?? '');
+    $phone = trim($data['phone']   ?? '');
 
     $stmt = mysqli_prepare(
         $conn,
@@ -39,37 +39,37 @@ function user_create(array $data): bool|string
     return $ok ? true : 'db_error';
 }
 
-/* ─── FIND ───────────────────────────────────────────────────────────────── */
+/*  FIND  */
 
-function user_find_by_email(string $email): array|false
+function user_find_by_email(string $email)
 {
     $conn = getConnection();
     $stmt = mysqli_prepare($conn, 'SELECT * FROM users WHERE email = ? LIMIT 1');
     mysqli_stmt_bind_param($stmt, 's', $email);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
-    $user   = mysqli_fetch_assoc($result);
+    $user = mysqli_fetch_assoc($result);
     mysqli_stmt_close($stmt);
     mysqli_close($conn);
     return $user ?: false;
 }
 
-function user_find_by_id(int $id): array|false
+function user_find_by_id(int $id)
 {
     $conn = getConnection();
     $stmt = mysqli_prepare($conn, 'SELECT * FROM users WHERE id = ? LIMIT 1');
     mysqli_stmt_bind_param($stmt, 'i', $id);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
-    $user   = mysqli_fetch_assoc($result);
+    $user = mysqli_fetch_assoc($result);
     mysqli_stmt_close($stmt);
     mysqli_close($conn);
     return $user ?: false;
 }
 
-/* ─── LOGIN ──────────────────────────────────────────────────────────────── */
+/*  LOGIN  */
 
-function user_login(string $email, string $password): array|false
+function user_login(string $email, string $password)
 {
     $user = user_find_by_email($email);
     if (!$user) return false;
@@ -79,15 +79,14 @@ function user_login(string $email, string $password): array|false
     return $user;
 }
 
-/* ─── REMEMBER-ME TOKEN ──────────────────────────────────────────────────── */
+/*  REMEMBER-ME TOKEN  */
 
-function user_save_token(int $userId, string $token): void
+function user_save_token(int $userId, string $token)
 {
     $conn = getConnection();
     $hash = hash('sha256', $token);
     $stmt = mysqli_prepare($conn, 'UPDATE users SET remember_token = ? WHERE id = ?');
 
-    // remember_token column may not exist yet; graceful ignore
     if ($stmt) {
         mysqli_stmt_bind_param($stmt, 'si', $hash, $userId);
         mysqli_stmt_execute($stmt);
@@ -96,7 +95,7 @@ function user_save_token(int $userId, string $token): void
     mysqli_close($conn);
 }
 
-function user_find_by_token(string $token): array|false
+function user_find_by_token(string $token)
 {
     $conn = getConnection();
     $hash = hash('sha256', $token);
@@ -111,7 +110,7 @@ function user_find_by_token(string $token): array|false
     return $user ?: false;
 }
 
-function user_clear_token(int $userId): void
+function user_clear_token(int $userId)
 {
     $conn = getConnection();
     $null = null;
@@ -124,17 +123,16 @@ function user_clear_token(int $userId): void
     mysqli_close($conn);
 }
 
-/* ─── UPDATE PROFILE ─────────────────────────────────────────────────────── */
+/*  UPDATE PROFILE  */
 
-function user_update_profile(int $id, array $data): bool
+function user_update_profile(int $id, array $data)
 {
-    $conn    = getConnection();
-    $name    = trim($data['name']);
-    $email   = trim($data['email']);
+    $conn = getConnection();
+    $name = trim($data['name']);
+    $email = trim($data['email']);
     $address = trim($data['address'] ?? '');
-    $phone   = trim($data['phone']   ?? '');
+    $phone = trim($data['phone']   ?? '');
 
-    // unique-email check excluding self
     $chk = mysqli_prepare($conn, 'SELECT id FROM users WHERE email = ? AND id != ?');
     mysqli_stmt_bind_param($chk, 'si', $email, $id);
     mysqli_stmt_execute($chk);
@@ -157,7 +155,7 @@ function user_update_profile(int $id, array $data): bool
     return $ok;
 }
 
-function user_update_picture(int $id, string $picturePath): bool
+function user_update_picture(int $id, string $picturePath)
 {
     $conn = getConnection();
     $stmt = mysqli_prepare($conn, 'UPDATE users SET profile_picture = ? WHERE id = ?');
@@ -168,7 +166,7 @@ function user_update_picture(int $id, string $picturePath): bool
     return $ok;
 }
 
-function user_change_password(int $id, string $currentPassword, string $newPassword): string
+function user_change_password(int $id, string $currentPassword, string $newPassword)
 {
     $user = user_find_by_id($id);
     if (!$user) return 'not_found';
@@ -184,18 +182,18 @@ function user_change_password(int $id, string $currentPassword, string $newPassw
     return $ok ? 'ok' : 'db_error';
 }
 
-/* ─── ALL / DELETE (admin) ───────────────────────────────────────────────── */
+/*  ALL / DELETE (admin)  */
 
-function user_all(): array
+function user_all()
 {
-    $conn   = getConnection();
+    $conn = getConnection();
     $result = mysqli_query($conn, 'SELECT id, name, email, role, created_at FROM users ORDER BY created_at DESC');
-    $rows   = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
     mysqli_close($conn);
     return $rows;
 }
 
-function user_delete(int $id): bool
+function user_delete(int $id)
 {
     $conn = getConnection();
     $stmt = mysqli_prepare($conn, 'DELETE FROM users WHERE id = ?');

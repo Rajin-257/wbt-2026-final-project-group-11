@@ -2,17 +2,19 @@
 
 require_once __DIR__ . '/../config/db.php';
 
-/**
- * Home page — categories + initial medicine listing
- */
-function shop_home(): void
+function shop_home()
 {
-    if (session_status() === PHP_SESSION_NONE) session_start();
-    if (function_exists('try_remember_me')) try_remember_me();
+    if (session_status() === PHP_SESSION_NONE) 
+    {
+        session_start();
+    }
+    if (function_exists('try_remember_me')) 
+    {
+        try_remember_me();
+    }
 
     $conn = getConnection();
 
-    // All categories with medicine count
     $catResult  = mysqli_query($conn, "
         SELECT c.id, c.name, c.category_type,
                COUNT(m.id) AS medicine_count
@@ -23,28 +25,26 @@ function shop_home(): void
     ");
     $categories = mysqli_fetch_all($catResult, MYSQLI_ASSOC);
 
-    // Determine active filter from query string
     $activeCategoryId = isset($_GET['category']) ? (int)$_GET['category'] : 0;
-    $activeType       = in_array($_GET['type'] ?? '', ['liquid', 'solid'])
+    $activeType = in_array($_GET['type'] ?? '', ['liquid', 'solid'])
                         ? $_GET['type'] : '';
 
-    // Build medicines query
-    $sql    = "SELECT m.*, c.name AS category_name, c.category_type
+    $sql = "SELECT m.*, c.name AS category_name, c.category_type
                FROM medicines m
                LEFT JOIN categories c ON m.category_id = c.id
                WHERE 1=1";
     $params = [];
-    $types  = '';
+    $types = '';
 
     if ($activeCategoryId > 0) {
-        $sql    .= " AND m.category_id = ?";
+        $sql .= " AND m.category_id = ?";
         $params[] = $activeCategoryId;
-        $types  .= 'i';
+        $types .= 'i';
     }
     if ($activeType !== '') {
-        $sql    .= " AND c.category_type = ?";
+        $sql .= " AND c.category_type = ?";
         $params[] = $activeType;
-        $types  .= 's';
+        $types .= 's';
     }
     $sql .= " ORDER BY m.name ASC";
 
@@ -56,14 +56,13 @@ function shop_home(): void
     $medicines = mysqli_fetch_all(mysqli_stmt_get_result($stmt), MYSQLI_ASSOC);
     mysqli_stmt_close($stmt);
 
-    // All vendors for filter dropdown
     $vendorResult = mysqli_query($conn, "SELECT DISTINCT vendor_name FROM medicines ORDER BY vendor_name");
-    $vendors      = array_column(mysqli_fetch_all($vendorResult, MYSQLI_ASSOC), 'vendor_name');
+    $vendors = array_column(mysqli_fetch_all($vendorResult, MYSQLI_ASSOC), 'vendor_name');
 
     mysqli_close($conn);
 
-    $title  = 'Home — Medicine Shop';
-    $view   = __DIR__ . '/../views/home.php';
+    $title = 'Home - Medicine Shop';
+    $view = __DIR__ . '/../views/home.php';
     $layout = __DIR__ . '/../views/layout.php';
     include $layout;
 }

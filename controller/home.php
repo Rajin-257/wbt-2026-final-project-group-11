@@ -2,9 +2,9 @@
 
 require_once __DIR__ . '/../model/User.php';
 
-/* ─── helpers ─────────────────────────────────────────────────────────────── */
+/*  helpers  */
 
-function require_login(): void
+function require_login()
 {
     if (session_status() === PHP_SESSION_NONE) session_start();
     if (empty($_SESSION['user_id'])) {
@@ -13,7 +13,7 @@ function require_login(): void
     }
 }
 
-function require_customer(): void
+function require_customer()
 {
     require_login();
     if (($_SESSION['role'] ?? '') !== 'customer') {
@@ -22,9 +22,9 @@ function require_customer(): void
     }
 }
 
-/* ─── auto-login via remember-me cookie ──────────────────────────────────── */
+/*  auto-login via remember-me cookie  */
 
-function try_remember_me(): void
+function try_remember_me()
 {
     if (session_status() === PHP_SESSION_NONE) session_start();
     if (!empty($_SESSION['user_id'])) return;
@@ -36,14 +36,14 @@ function try_remember_me(): void
     if (!$user) return;
 
     $_SESSION['user_id'] = $user['id'];
-    $_SESSION['name']    = $user['name'];
-    $_SESSION['role']    = $user['role'];
-    $_SESSION['email']   = $user['email'];
+    $_SESSION['name'] = $user['name'];
+    $_SESSION['role'] = $user['role'];
+    $_SESSION['email'] = $user['email'];
 }
 
-/* ─── home ───────────────────────────────────────────────────────────────── */
+/*  home  */
 
-function home(): void
+function home()
 {
     if (session_status() === PHP_SESSION_NONE) session_start();
     try_remember_me();
@@ -53,42 +53,52 @@ function home(): void
     include $layout;
 }
 
-/* ─── register ───────────────────────────────────────────────────────────── */
+/*  register  */
 
-function register(): void
+function register()
 {
     if (session_status() === PHP_SESSION_NONE) session_start();
 
-    $errors  = [];
+    $errors= [];
     $success = '';
-    $old     = [];
+    $old = [];
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         csrf_require();
-        $name     = trim($_POST['name']     ?? '');
-        $email    = trim($_POST['email']    ?? '');
-        $password = $_POST['password']      ?? '';
-        $address  = trim($_POST['address']  ?? '');
-        $phone    = trim($_POST['phone']    ?? '');
-        $role     = $_POST['role']          ?? '';
+        $name= trim($_POST['name']?? '');
+        $email= trim($_POST['email']?? '');
+        $password= $_POST['password']?? '';
+        $address= trim($_POST['address']?? '');
+        $phone= trim($_POST['phone']?? '');
+        $role= $_POST['role']?? '';
 
-        $old = compact('name', 'email', 'address', 'phone', 'role');
+        $old=compact('name', 'email', 'address', 'phone', 'role');
 
-        // ── server-side validation ──
-        if ($name === '')                         $errors[] = 'Name is required.';
+        //server-side validation 
+        if ($name === '')
+        {
+            $errors[] = 'Name is required.';
+        }
         if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL))
-                                                  $errors[] = 'A valid email is required.';
-        if (strlen($password) < 8)                $errors[] = 'Password must be at least 8 characters.';
-        if (!in_array($role, ['admin', 'customer'])) $errors[] = 'Please select a valid role.';
-
+        {
+            $errors[] = 'A valid email is required.';
+        }
+        if (strlen($password) < 8)
+        {
+            $errors[] = 'Password must be at least 8 characters.';
+        }
+        if (!in_array($role, ['admin', 'customer']))
+        {
+            $errors[] = 'Please select a valid role.';
+        }
         if (empty($errors)) {
             $result = user_create([
-                'name'     => $name,
-                'email'    => $email,
-                'password' => $password,
-                'address'  => $address,
-                'phone'    => $phone,
-                'role'     => $role,
+                'name'=> $name,
+                'email'=> $email,
+                'password'=> $password,
+                'address'=> $address,
+                'phone'=> $phone,
+                'role'=> $role,
             ]);
 
             if ($result === true) {
@@ -102,15 +112,15 @@ function register(): void
         }
     }
 
-    $title  = 'Register — Medicine Shop';
-    $view   = __DIR__ . '/../views/auth/registration.php';
-    $layout = __DIR__ . '/../views/layout.php';
+    $title= 'Register — Medicine Shop';
+    $view= __DIR__ . '/../views/auth/registration.php';
+    $layout= __DIR__ . '/../views/layout.php';
     include $layout;
 }
 
-/* ─── login ──────────────────────────────────────────────────────────────── */
+/*  login  */
 
-function login(): void
+function login()
 {
     if (session_status() === PHP_SESSION_NONE) session_start();
 
@@ -119,8 +129,8 @@ function login(): void
         _redirect_after_login($_SESSION['role']);
     }
 
-    $errors  = [];
-    $success = '';
+    $errors= [];
+    $success= '';
 
     if (isset($_GET['registered'])) {
         $success = 'Account created! Please sign in.';
@@ -128,15 +138,19 @@ function login(): void
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         csrf_require();
-        $email    = trim($_POST['email']    ?? '');
-        $password = $_POST['password']      ?? '';
+        $email = trim($_POST['email']?? '');
+        $password = $_POST['password']?? '';
         $remember = !empty($_POST['remember']);
 
-        // ── server-side validation ──
+        //server-side validation 
         if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL))
+        {
             $errors[] = 'Please enter a valid email address.';
+        }
         if ($password === '')
+        {
             $errors[] = 'Password is required.';
+        }
 
         if (empty($errors)) {
             $user = user_login($email, $password);
@@ -148,22 +162,15 @@ function login(): void
                 session_regenerate_id(true);
                 csrf_regenerate();
                 $_SESSION['user_id'] = $user['id'];
-                $_SESSION['name']    = $user['name'];
-                $_SESSION['role']    = $user['role'];
-                $_SESSION['email']   = $user['email'];
+                $_SESSION['name'] = $user['name'];
+                $_SESSION['role'] = $user['role'];
+                $_SESSION['email']= $user['email'];
 
                 // remember-me cookie (30 days)
                 if ($remember) {
                     $token = bin2hex(random_bytes(32));
                     user_save_token((int)$user['id'], $token);
-                    setcookie(
-                        'remember_token',
-                        $token,
-                        time() + 30 * 24 * 3600,
-                        '/',
-                        '',
-                        false,  // secure — set true on HTTPS
-                        true    // httpOnly
+                    setcookie('remember_token',$token, time() + 30 * 24 * 3600,'/','',false,true
                     );
                 }
 
@@ -178,54 +185,58 @@ function login(): void
     include $layout;
 }
 
-function _redirect_after_login(string $role): void
+function _redirect_after_login(string $role)
 {
-    if ($role === 'admin') {
+    if ($role === 'admin')
+    {
         header('Location: index.php?page=admin/dashboard');
-    } else {
+    }
+    else
+    {
         header('Location: index.php');
     }
-    exit();
 }
 
-/* ─── logout ─────────────────────────────────────────────────────────────── */
+/*  logout  */
 
-function logout(): void
+function logout()
 {
     if (session_status() === PHP_SESSION_NONE) session_start();
 
     // clear remember-me
     if (!empty($_SESSION['user_id'])) {
-        user_clear_token((int)$_SESSION['user_id']);
+        {
+            user_clear_token((int)$_SESSION['user_id']);
+        }
     }
 
     setcookie('remember_token', '', time() - 3600, '/');
     $_SESSION = [];
     if (ini_get('session.use_cookies')) {
-        $p = session_get_cookie_params();
+        {
+            $p = session_get_cookie_params();
         setcookie(session_name(), '', time() - 42000,
             $p['path'], $p['domain'], $p['secure'], $p['httponly']);
+        }
+        session_destroy();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        csrf_regenerate();
+        header('Location: index.php?page=login');
     }
-    session_destroy();
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
-    csrf_regenerate();
-
-    header('Location: index.php?page=login');
-    exit();
 }
 
-/* ─── profile ────────────────────────────────────────────────────────────── */
+/*  profile  */
 
-function profile(): void
+function profile()
 {
     require_login();
 
-    $errors  = [];
+    $errors = [];
     $success = '';
-    $userId  = (int)$_SESSION['user_id'];
-    $user    = user_find_by_id($userId);
+    $userId = (int)$_SESSION['user_id'];
+    $user = user_find_by_id($userId);
 
     if (!$user) {
         logout();
@@ -235,12 +246,12 @@ function profile(): void
         csrf_require();
         $action = $_POST['action'] ?? 'update_profile';
 
-        /* ── update basic info ── */
+        /*  update basic info  */
         if ($action === 'update_profile') {
-            $name    = trim($_POST['name']    ?? '');
-            $email   = trim($_POST['email']   ?? '');
+            $name = trim($_POST['name']    ?? '');
+            $email = trim($_POST['email']   ?? '');
             $address = trim($_POST['address'] ?? '');
-            $phone   = trim($_POST['phone']   ?? '');
+            $phone = trim($_POST['phone']   ?? '');
 
             if ($name === '')
                 $errors[] = 'Name is required.';
@@ -260,8 +271,8 @@ function profile(): void
                     $uploadDir = __DIR__ . '/../public/uploads/';
                     if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
 
-                    $ext         = pathinfo($file['name'], PATHINFO_EXTENSION);
-                    $filename    = 'user_' . $userId . '_' . time() . '.' . $ext;
+                    $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+                    $filename = 'user_' . $userId . '_' . time() . '.' . $ext;
                     $destination = $uploadDir . $filename;
 
                     if (move_uploaded_file($file['tmp_name'], $destination)) {
@@ -274,10 +285,10 @@ function profile(): void
 
             if (empty($errors)) {
                 $updated = user_update_profile($userId, [
-                    'name'    => $name,
-                    'email'   => $email,
-                    'address' => $address,
-                    'phone'   => $phone,
+                    'name' => $name,
+                    'email' => $email,
+                    'address'=> $address,
+                    'phone' => $phone,
                 ]);
 
                 if ($updated === false) {
@@ -289,22 +300,22 @@ function profile(): void
                         $user['profile_picture'] = $picturePath;
                     }
                     // refresh session
-                    $_SESSION['name']  = $name;
-                    $_SESSION['email'] = $email;
-                    $user['name']      = $name;
-                    $user['email']     = $email;
-                    $user['address']   = $address;
-                    $user['phone']     = $phone;
+                    $_SESSION['name'] = $name;
+                    $_SESSION['email']= $email;
+                    $user['name'] = $name;
+                    $user['email'] = $email;
+                    $user['address']= $address;
+                    $user['phone'] = $phone;
                     $success = 'Profile updated successfully.';
                 }
             }
         }
 
-        /* ── change password ── */
+        /*  change password  */
         if ($action === 'change_password') {
-            $current  = $_POST['current_password']  ?? '';
-            $newPass  = $_POST['new_password']       ?? '';
-            $confirm  = $_POST['confirm_password']   ?? '';
+            $current= $_POST['current_password']  ?? '';
+            $newPass = $_POST['new_password']       ?? '';
+            $confirm = $_POST['confirm_password']   ?? '';
 
             if ($current === '')
                 $errors[] = 'Current password is required.';
@@ -329,8 +340,8 @@ function profile(): void
         $user = user_find_by_id($userId);
     }
 
-    $title  = 'My Profile — Medicine Shop';
-    $view   = __DIR__ . '/../views/auth/profile.php';
+    $title= 'My Profile — Medicine Shop';
+    $view = __DIR__ . '/../views/auth/profile.php';
     $layout = __DIR__ . '/../views/layout.php';
     include $layout;
 }

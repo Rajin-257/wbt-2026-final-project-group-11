@@ -2,8 +2,8 @@
 
 <div class="shop-wrap">
 
-    <!-- ══ Hero ══════════════════════════════════════════════════════════ -->
-    <section class="shop-hero">
+    <!--  Hero  -->
+    <!-- <section class="shop-hero">
         <div class="shop-hero__inner">
             <div class="shop-hero__text">
                 <?php if (!empty($_SESSION['user_id'])): ?>
@@ -19,9 +19,12 @@
                 <?php endif; ?>
             </div>
         </div>
+    </section> -->
+
+    <section class="shop-hero">
     </section>
 
-    <!-- ══ Search & Filter bar ═══════════════════════════════════════════ -->
+    <!--  Search & Filter bar  -->
     <section class="shop-search-bar">
         <div class="shop-inner">
             <div class="search-row">
@@ -67,7 +70,7 @@
 
     <div class="shop-inner shop-layout">
 
-        <!-- ══ Sidebar: Categories ════════════════════════════════════════ -->
+        <!--  Sidebar: Categories  -->
         <aside class="cat-sidebar">
             <h2 class="cat-sidebar__title">Categories</h2>
 
@@ -121,7 +124,7 @@
             <?php endif; ?>
         </aside>
 
-        <!-- ══ Main: Medicine Grid ════════════════════════════════════════ -->
+        <!--  Main: Medicine Grid  -->
         <main class="medicine-main">
 
             <!-- results header -->
@@ -166,18 +169,18 @@
 var IS_CUSTOMER = <?php echo json_encode(!empty($_SESSION['user_id']) && ($_SESSION['role'] ?? '') === 'customer'); ?>;
 
 (function () {
-    /* ── elements ── */
-    var qInput    = document.getElementById('search-q');
+    /*  elements  */
+    var qInput = document.getElementById('search-q');
     var selVendor = document.getElementById('filter-vendor');
-    var selGenre  = document.getElementById('filter-genre');
-    var selType   = document.getElementById('filter-type');
-    var grid      = document.getElementById('medicine-grid');
-    var spinner   = document.getElementById('search-spinner');
-    var countEl   = document.getElementById('results-count');
-    var btnClear  = document.getElementById('btn-clear-search');
+    var selGenre = document.getElementById('filter-genre');
+    var selType = document.getElementById('filter-type');
+    var grid = document.getElementById('medicine-grid');
+    var spinner = document.getElementById('search-spinner');
+    var countEl  = document.getElementById('results-count');
+    var btnClear = document.getElementById('btn-clear-search');
 
     var debounceTimer = null;
-    var currentXhr    = null;
+    var currentXhr = null;
 
     function setSpinner(loading) {
         if (!spinner) return;
@@ -187,7 +190,7 @@ var IS_CUSTOMER = <?php echo json_encode(!empty($_SESSION['user_id']) && ($_SESS
 
     setSpinner(false);
 
-    /* ── card template ── */
+    /*  card template  */
     function renderCard(m) {
         var inStock  = m.availability > 0;
         var img      = m.image_path
@@ -230,7 +233,7 @@ var IS_CUSTOMER = <?php echo json_encode(!empty($_SESSION['user_id']) && ($_SESS
         return '<a href="index.php?page=login" class="btn btn--primary btn--sm">Add to Cart</a>';
     }
 
-    /* ── fetch & render ── */
+    /*  fetch & render  */
     function doSearch() {
         var q      = qInput.value.trim();
         var vendor = selVendor.value;
@@ -283,7 +286,7 @@ var IS_CUSTOMER = <?php echo json_encode(!empty($_SESSION['user_id']) && ($_SESS
         debounceTimer = setTimeout(doSearch, 300);
     }
 
-    /* ── bind events ── */
+    /*  bind events  */
     qInput.addEventListener('input', scheduleSearch);
     selVendor.addEventListener('change', scheduleSearch);
     selGenre.addEventListener('change', scheduleSearch);
