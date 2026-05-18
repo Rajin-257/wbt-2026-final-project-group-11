@@ -6,14 +6,14 @@
 
         <?php if (!empty($success)): ?>
             <div class="auth-alert auth-alert--success">
-                <p><?php echo htmlspecialchars($success); ?></p>
+                <p><?php echo e($success); ?></p>
             </div>
         <?php endif; ?>
 
         <?php if (!empty($errors)): ?>
             <div class="auth-alert auth-alert--error">
                 <?php foreach ($errors as $e): ?>
-                    <p><?php echo htmlspecialchars($e); ?></p>
+                    <p><?php echo e($e); ?></p>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
@@ -26,7 +26,7 @@
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" required
                        placeholder="you@example.com"
-                       value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>">
+                       value="<?php echo e($_POST['email'] ?? ''); ?>">
                 <span class="field-error" id="err-email"></span>
             </div>
             <div class="auth-field">

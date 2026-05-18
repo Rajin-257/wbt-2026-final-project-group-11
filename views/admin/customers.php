@@ -13,8 +13,8 @@
     <div class="container">
         <h1>Customer Management</h1>
 
-        <?php if ($error):   ?><div class="error"><?= htmlspecialchars($error) ?></div><?php endif; ?>
-        <?php if ($success): ?><div class="success"><?= htmlspecialchars($success) ?></div><?php endif; ?>
+        <?php if ($error):   ?><div class="error"><?= e($error) ?></div><?php endif; ?>
+        <?php if ($success): ?><div class="success"><?= e($success) ?></div><?php endif; ?>
 
         <table>
             <thead>
@@ -35,10 +35,10 @@
                     <?php foreach ($customers as $customer): ?>
                     <tr>
                         <td><?= $customer['id'] ?></td>
-                        <td><?= htmlspecialchars($customer['name']) ?></td>
-                        <td><?= htmlspecialchars($customer['email']) ?></td>
-                        <td><?= htmlspecialchars($customer['phone']) ?></td>
-                        <td><?= htmlspecialchars($customer['address']) ?></td>
+                        <td><?= e($customer['name']) ?></td>
+                        <td><?= e($customer['email']) ?></td>
+                        <td><?= e($customer['phone']) ?></td>
+                        <td><?= e($customer['address']) ?></td>
                         <td><?= $customer['created_at'] ?></td>
                         <td>
                             <form method="POST" action="index.php?page=admin/customers" class="inline-form"

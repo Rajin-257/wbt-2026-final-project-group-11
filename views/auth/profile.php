@@ -4,29 +4,29 @@
         <div class="profile-header">
             <div class="profile-avatar">
                 <?php if (!empty($user['profile_picture'])): ?>
-                    <img src="<?php echo htmlspecialchars($user['profile_picture']); ?>"
+                    <img src="<?= e_url($user['profile_picture']) ?>"
                          alt="Profile picture" class="profile-avatar__img">
                 <?php else: ?>
                     <div class="profile-avatar__placeholder">
-                        <?php echo strtoupper(mb_substr($user['name'], 0, 1)); ?>
+                        <?= e(mb_strtoupper(mb_substr($user['name'], 0, 1))) ?>
                     </div>
                 <?php endif; ?>
             </div>
             <div>
-                <h1 class="profile-name"><?php echo htmlspecialchars($user['name']); ?></h1>
-                <span class="profile-role-badge profile-role-badge--<?php echo $user['role']; ?>">
-                    <?php echo ucfirst($user['role']); ?>
+                <h1 class="profile-name"><?php echo e($user['name']); ?></h1>
+                <span class="profile-role-badge profile-role-badge--<?= e_css($user['role'], ['admin', 'customer']) ?>">
+                    <?= e(ucfirst($user['role'])) ?>
                 </span>
             </div>
         </div>
 
         <?php if (!empty($success)): ?>
-            <div class="auth-alert auth-alert--success"><p><?php echo htmlspecialchars($success); ?></p></div>
+            <div class="auth-alert auth-alert--success"><p><?php echo e($success); ?></p></div>
         <?php endif; ?>
         <?php if (!empty($errors)): ?>
             <div class="auth-alert auth-alert--error">
                 <?php foreach ($errors as $e): ?>
-                    <p><?php echo htmlspecialchars($e); ?></p>
+                    <p><?php echo e($e); ?></p>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
@@ -43,26 +43,26 @@
             <div class="auth-field">
                 <label for="name">Full Name</label>
                 <input type="text" id="name" name="name" required
-                       value="<?php echo htmlspecialchars($user['name']); ?>">
+                       value="<?php echo e($user['name']); ?>">
                 <span class="field-error" id="err-name"></span>
             </div>
             <div class="auth-field">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" required
-                       value="<?php echo htmlspecialchars($user['email']); ?>">
+                       value="<?php echo e($user['email']); ?>">
                 <span class="field-error" id="err-email"></span>
             </div>
             <div class="auth-field">
                 <label for="address">Address</label>
                 <input type="text" id="address" name="address"
                        placeholder="Street, city, postal code"
-                       value="<?php echo htmlspecialchars($user['address'] ?? ''); ?>">
+                       value="<?php echo e($user['address'] ?? ''); ?>">
             </div>
             <div class="auth-field">
                 <label for="phone">Phone</label>
                 <input type="tel" id="phone" name="phone"
                        placeholder="+880 1xxx xxxxxx"
-                       value="<?php echo htmlspecialchars($user['phone'] ?? ''); ?>">
+                       value="<?php echo e($user['phone'] ?? ''); ?>">
                 <span class="field-error" id="err-phone"></span>
             </div>
             <div class="auth-field">

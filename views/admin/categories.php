@@ -13,8 +13,8 @@
     <div class="container">
         <h1>Category Management</h1>
 
-        <?php if ($error):   ?><div class="error"><?= htmlspecialchars($error) ?></div><?php endif; ?>
-        <?php if ($success): ?><div class="success"><?= htmlspecialchars($success) ?></div><?php endif; ?>
+        <?php if ($error):   ?><div class="error"><?= e($error) ?></div><?php endif; ?>
+        <?php if ($success): ?><div class="success"><?= e($success) ?></div><?php endif; ?>
 
         <div class="form-box">
             <h3><?= $edit_category ? 'Edit Category' : 'Add New Category' ?></h3>
@@ -29,7 +29,7 @@
 
                 <label>Category Name</label>
                 <input type="text" name="name" id="cat_name"
-                       value="<?= $edit_category ? htmlspecialchars($edit_category['name']) : '' ?>"
+                       value="<?= $edit_category ? e($edit_category['name']) : '' ?>"
                        placeholder="e.g. Paracetamol genre">
 
                 <label>Type</label>
@@ -66,8 +66,8 @@
                     <?php foreach ($categories as $cat): ?>
                     <tr>
                         <td><?= $cat['id'] ?></td>
-                        <td><?= htmlspecialchars($cat['name']) ?></td>
-                        <td><?= htmlspecialchars($cat['category_type']) ?></td>
+                        <td><?= e($cat['name']) ?></td>
+                        <td><?= e($cat['category_type']) ?></td>
                         <td><?= $cat['created_at'] ?></td>
                         <td>
                             <a href="index.php?page=admin/categories&edit=<?= $cat['id'] ?>"

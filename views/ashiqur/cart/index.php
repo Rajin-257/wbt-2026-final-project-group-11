@@ -38,7 +38,7 @@ require ROOT_PATH . '/views/ashiqur/header.php';
                     <tr class="cart-row" data-cart-id="<?= $item['cart_id'] ?>" data-stock="<?= $item['stock'] ?>">
                         <td class="cart-row__name">
                             <?php if (!empty($item['image_path'])): ?>
-                                <img src="<?= BASE_URL . '/' . e($item['image_path']) ?>" alt="" class="cart-thumb">
+                                <img src="<?= BASE_URL . '/' . e_url($item['image_path']) ?>" alt="" class="cart-thumb">
                             <?php else: ?>
                                 <div class="cart-thumb cart-thumb--placeholder">💊</div>
                             <?php endif; ?>

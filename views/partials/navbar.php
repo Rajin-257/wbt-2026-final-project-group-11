@@ -38,7 +38,7 @@ if (!empty($_SESSION['user_id']) && ($_SESSION['role'] ?? '') === 'customer') {
 
                 <a class="navbar__btn navbar__btn--ghost"
                    href="index.php?page=profile">
-                    <?php echo htmlspecialchars($_SESSION['name']); ?>
+                    <?= e($_SESSION['name'] ?? '') ?>
                 </a>
 
                 <a class="navbar__btn navbar__btn--primary"

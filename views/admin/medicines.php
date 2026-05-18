@@ -13,8 +13,8 @@
     <div class="container">
         <h1>Medicine Management</h1>
 
-        <?php if ($error):   ?><div class="error"><?= htmlspecialchars($error) ?></div><?php endif; ?>
-        <?php if ($success): ?><div class="success"><?= htmlspecialchars($success) ?></div><?php endif; ?>
+        <?php if ($error):   ?><div class="error"><?= e($error) ?></div><?php endif; ?>
+        <?php if ($success): ?><div class="success"><?= e($success) ?></div><?php endif; ?>
 
         <div class="form-box">
             <h3><?= $edit_medicine ? 'Edit Medicine' : 'Add New Medicine' ?></h3>
@@ -29,7 +29,7 @@
 
                 <label>Medicine Name</label>
                 <input type="text" name="name" id="med_name"
-                       value="<?= $edit_medicine ? htmlspecialchars($edit_medicine['name']) : '' ?>"
+                       value="<?= $edit_medicine ? e($edit_medicine['name']) : '' ?>"
                        placeholder="e.g. Napa 500mg">
 
                 <label>Category</label>
@@ -38,14 +38,14 @@
                     <?php foreach ($cat_list as $cat): ?>
                         <option value="<?= $cat['id'] ?>"
                             <?= ($edit_medicine && $edit_medicine['category_id'] == $cat['id']) ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($cat['name']) ?> (<?= $cat['category_type'] ?>)
+                            <?= e($cat['name']) ?> (<?= e($cat['category_type']) ?>)
                         </option>
                     <?php endforeach; ?>
                 </select>
 
                 <label>Vendor Name</label>
                 <input type="text" name="vendor_name" id="med_vendor"
-                       value="<?= $edit_medicine ? htmlspecialchars($edit_medicine['vendor_name']) : '' ?>"
+                       value="<?= $edit_medicine ? e($edit_medicine['vendor_name']) : '' ?>"
                        placeholder="e.g. Square Pharma">
 
                 <label>Price (BDT)</label>
@@ -60,11 +60,11 @@
 
                 <label>Description</label>
                 <textarea name="description" id="med_desc"
-                          rows="3"><?= $edit_medicine ? htmlspecialchars($edit_medicine['description']) : '' ?></textarea>
+                          rows="3"><?= $edit_medicine ? e($edit_medicine['description']) : '' ?></textarea>
 
                 <label>Image (JPEG/PNG, max 2MB)</label>
                 <?php if ($edit_medicine && $edit_medicine['image_path']): ?>
-                    <img src="<?= htmlspecialchars($edit_medicine['image_path']) ?>" class="thumb">
+                    <img src="<?= e_url($edit_medicine['image_path']) ?>" class="thumb">
                     <small>Upload new image to replace existing</small>
                 <?php endif; ?>
                 <input type="file" name="image" id="med_image"
@@ -102,15 +102,15 @@
                         <td><?= $med['id'] ?></td>
                         <td>
                             <?php if ($med['image_path']): ?>
-                                <img src="<?= htmlspecialchars($med['image_path']) ?>"
+                                <img src="<?= e_url($med['image_path']) ?>"
                                      class="thumb">
                             <?php else: ?>
                                 No image
                             <?php endif; ?>
                         </td>
-                        <td><?= htmlspecialchars($med['name']) ?></td>
-                        <td><?= htmlspecialchars($med['category_name']) ?></td>
-                        <td><?= htmlspecialchars($med['vendor_name']) ?></td>
+                        <td><?= e($med['name']) ?></td>
+                        <td><?= e($med['category_name']) ?></td>
+                        <td><?= e($med['vendor_name']) ?></td>
                         <td><?= $med['price'] ?> bdt</td>
                         <td><?= $med['availability'] ?></td>
                         <td>

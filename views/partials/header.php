@@ -8,8 +8,9 @@ if (function_exists('try_remember_me')) try_remember_me();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo htmlspecialchars($title ?? 'Medicine Shop'); ?></title>
+    <title><?= e($title ?? 'Medicine Shop') ?></title>
     <link rel="stylesheet" href="public/style.css">
     <?php include __DIR__ . '/csrf_head.php'; ?>
+    <script src="public/xss.js"></script>
 </head>
 <body>

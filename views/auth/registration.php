@@ -7,7 +7,7 @@
         <?php if (!empty($errors)): ?>
             <div class="auth-alert auth-alert--error">
                 <?php foreach ($errors as $e): ?>
-                    <p><?php echo htmlspecialchars($e); ?></p>
+                    <p><?php echo e($e); ?></p>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
@@ -20,14 +20,14 @@
                 <label for="name">Name</label>
                 <input type="text" id="name" name="name" required
                        placeholder="Your full name"
-                       value="<?php echo htmlspecialchars($old['name'] ?? ''); ?>">
+                       value="<?php echo e($old['name'] ?? ''); ?>">
                 <span class="field-error" id="err-name"></span>
             </div>
             <div class="auth-field">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" required
                        placeholder="you@example.com"
-                       value="<?php echo htmlspecialchars($old['email'] ?? ''); ?>">
+                       value="<?php echo e($old['email'] ?? ''); ?>">
                 <span class="field-error" id="err-email"></span>
             </div>
             <div class="auth-field">
@@ -40,13 +40,13 @@
                 <label for="address">Address</label>
                 <input type="text" id="address" name="address"
                        placeholder="Street, city, postal code"
-                       value="<?php echo htmlspecialchars($old['address'] ?? ''); ?>">
+                       value="<?php echo e($old['address'] ?? ''); ?>">
             </div>
             <div class="auth-field">
                 <label for="phone">Phone</label>
                 <input type="tel" id="phone" name="phone"
                        placeholder="+880 1xxx xxxxxx"
-                       value="<?php echo htmlspecialchars($old['phone'] ?? ''); ?>">
+                       value="<?php echo e($old['phone'] ?? ''); ?>">
                 <span class="field-error" id="err-phone"></span>
             </div>
             <div class="auth-field">

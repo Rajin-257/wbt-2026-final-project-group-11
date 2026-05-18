@@ -2,12 +2,13 @@
 // Expected: $med array with keys: id, name, vendor_name, price, availability,
 //           image_path, category_name, category_type, description
 $inStock = (int)($med['availability'] ?? 0) > 0;
+$catType = e_css($med['category_type'] ?? '', ['liquid', 'solid']);
 ?>
 <div class="med-card">
     <div class="med-card__media">
         <?php if (!empty($med['image_path']) && file_exists($med['image_path'])): ?>
-            <img src="<?php echo htmlspecialchars($med['image_path']); ?>"
-                 alt="<?php echo htmlspecialchars($med['name']); ?>"
+            <img src="<?= e_url($med['image_path']) ?>"
+                 alt="<?= e($med['name']) ?>"
                  class="med-card__img" loading="lazy">
         <?php else: ?>
             <div class="med-card__img-placeholder">
@@ -21,41 +22,41 @@ $inStock = (int)($med['availability'] ?? 0) > 0;
 
     <div class="med-card__body">
         <div class="med-card__badges">
-            <?php if (!empty($med['category_type'])): ?>
-                <span class="med-badge med-badge--<?php echo htmlspecialchars($med['category_type']); ?>">
-                    <?php echo htmlspecialchars($med['category_type']); ?>
+            <?php if ($catType !== ''): ?>
+                <span class="med-badge med-badge--<?= $catType ?>">
+                    <?= e($med['category_type']) ?>
                 </span>
             <?php endif; ?>
             <?php if ($inStock): ?>
-                <span class="med-badge med-badge--stock">In stock (<?php echo (int)$med['availability']; ?>)</span>
+                <span class="med-badge med-badge--stock">In stock (<?= (int) $med['availability'] ?>)</span>
             <?php else: ?>
                 <span class="med-badge med-badge--out">Out of stock</span>
             <?php endif; ?>
         </div>
 
-        <h3 class="med-card__name"><?php echo htmlspecialchars($med['name']); ?></h3>
+        <h3 class="med-card__name"><?= e($med['name']) ?></h3>
 
-        <p class="med-card__vendor"><?php echo htmlspecialchars($med['vendor_name']); ?></p>
+        <p class="med-card__vendor"><?= e($med['vendor_name']) ?></p>
 
         <?php if (!empty($med['category_name'])): ?>
             <p class="med-card__category">
-                <a href="index.php?category=<?php echo (int)$med['category_id']; ?>">
-                    <?php echo htmlspecialchars($med['category_name']); ?>
+                <a href="index.php?category=<?= (int) $med['category_id'] ?>">
+                    <?= e($med['category_name']) ?>
                 </a>
             </p>
         <?php endif; ?>
 
         <div class="med-card__footer">
-            <span class="med-card__price">৳ <?php echo number_format((float)$med['price'], 2); ?></span>
+            <span class="med-card__price">৳ <?= number_format((float) $med['price'], 2) ?></span>
             <?php if ($inStock): ?>
                 <?php if (!empty($_SESSION['user_id']) && ($_SESSION['role'] ?? '') === 'customer'): ?>
                     <div class="med-card__cart-wrap">
                         <input type="number" class="med-card__qty" value="1" min="1"
-                               max="<?php echo (int)$med['availability']; ?>"
+                               max="<?= (int) $med['availability'] ?>"
                                aria-label="Quantity">
                         <button type="button" class="btn btn--primary btn--sm med-card__cart"
-                                data-id="<?php echo (int)$med['id']; ?>"
-                                data-stock="<?php echo (int)$med['availability']; ?>">
+                                data-id="<?= (int) $med['id'] ?>"
+                                data-stock="<?= (int) $med['availability'] ?>">
                             Add to Cart
                         </button>
                     </div>

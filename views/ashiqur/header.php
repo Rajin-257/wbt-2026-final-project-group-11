@@ -26,6 +26,7 @@ if (!empty($_SESSION['user_id']) && ($_SESSION['role'] ?? '') === 'customer') {
     <link rel="stylesheet" href="<?= BASE_URL ?>/public/style.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/public/ashiqur.css">
     <?php include ROOT_PATH . '/views/partials/csrf_head.php'; ?>
+    <script src="<?= BASE_URL ?>/public/xss.js"></script>
 </head>
 <body>
 

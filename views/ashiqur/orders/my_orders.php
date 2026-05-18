@@ -26,7 +26,8 @@ require ROOT_PATH . '/views/ashiqur/header.php';
                     <span class="order-id">Order #<?= $o['id'] ?></span>
                     <span class="order-date"><?= date('d M Y', strtotime($o['order_date'])) ?></span>
                 </div>
-                <span class="status-badge status-badge--<?= $o['status'] ?>"><?= ucfirst($o['status']) ?></span>
+                <?php $st = e_css($o['status'], ['pending', 'accepted', 'rejected']); ?>
+                <span class="status-badge status-badge--<?= $st ?>"><?= e(ucfirst($o['status'])) ?></span>
             </div>
             <div class="order-card__body">
                 <div>

@@ -7,7 +7,7 @@
         <div class="shop-hero__inner">
             <div class="shop-hero__text">
                 <?php if (!empty($_SESSION['user_id'])): ?>
-                    <h1>Welcome back, <?php echo htmlspecialchars($_SESSION['name']); ?>!</h1>
+                    <h1>Welcome back, <?php echo e($_SESSION['name']); ?>!</h1>
                     <p>Browse our latest medicines and find what you need.</p>
                 <?php else: ?>
                     <h1>Your Online Medicine Shop</h1>
@@ -30,15 +30,15 @@
                         <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>
                     </svg>
                     <input type="text" id="search-q" class="search-input" placeholder="Search medicines…" autocomplete="off"
-                           value="<?php echo htmlspecialchars($_GET['q'] ?? ''); ?>">
+                           value="<?php echo e($_GET['q'] ?? ''); ?>">
                 </div>
 
                 <select id="filter-vendor" class="search-select">
                     <option value="">All Vendors</option>
                     <?php foreach ($vendors as $v): ?>
-                        <option value="<?php echo htmlspecialchars($v); ?>"
+                        <option value="<?php echo e($v); ?>"
                             <?php echo (($_GET['vendor'] ?? '') === $v) ? 'selected' : ''; ?>>
-                            <?php echo htmlspecialchars($v); ?>
+                            <?php echo e($v); ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
@@ -48,8 +48,8 @@
                     <?php foreach ($categories as $cat): ?>
                         <option value="<?php echo $cat['id']; ?>"
                             <?php echo (($activeCategoryId ?? 0) === (int)$cat['id']) ? 'selected' : ''; ?>>
-                            <?php echo htmlspecialchars($cat['name']); ?>
-                            (<?php echo $cat['category_type']; ?>)
+                            <?php echo e($cat['name']); ?>
+                            (<?= e($cat['category_type']) ?>)
                         </option>
                     <?php endforeach; ?>
                 </select>
@@ -95,7 +95,7 @@
                 <?php foreach ($liquidCats as $cat): ?>
                     <a href="index.php?category=<?php echo $cat['id']; ?>"
                        class="cat-item cat-item--sub <?php echo ($activeCategoryId === (int)$cat['id']) ? 'cat-item--active' : ''; ?>">
-                        <span class="cat-item__name"><?php echo htmlspecialchars($cat['name']); ?></span>
+                        <span class="cat-item__name"><?php echo e($cat['name']); ?></span>
                         <span class="cat-item__count"><?php echo $cat['medicine_count']; ?></span>
                     </a>
                 <?php endforeach; ?>
@@ -114,7 +114,7 @@
                 <?php foreach ($solidCats as $cat): ?>
                     <a href="index.php?category=<?php echo $cat['id']; ?>"
                        class="cat-item cat-item--sub <?php echo ($activeCategoryId === (int)$cat['id']) ? 'cat-item--active' : ''; ?>">
-                        <span class="cat-item__name"><?php echo htmlspecialchars($cat['name']); ?></span>
+                        <span class="cat-item__name"><?php echo e($cat['name']); ?></span>
                         <span class="cat-item__count"><?php echo $cat['medicine_count']; ?></span>
                     </a>
                 <?php endforeach; ?>
@@ -191,11 +191,12 @@ var IS_CUSTOMER = <?php echo json_encode(!empty($_SESSION['user_id']) && ($_SESS
     function renderCard(m) {
         var inStock  = m.availability > 0;
         var img      = m.image_path
-            ? '<img src="' + escHtml(m.image_path) + '" alt="' + escHtml(m.name) + '" class="med-card__img" loading="lazy">'
+            ? '<img src="' + escUrl(m.image_path) + '" alt="' + escHtml(m.name) + '" class="med-card__img" loading="lazy">'
             : '<div class="med-card__img-placeholder"><svg viewBox="0 0 48 48" fill="none" width="40" height="40"><rect x="8" y="14" width="32" height="22" rx="3" stroke="#d1d5db" stroke-width="2"/><path d="M24 20v10M19 25h10" stroke="#9ca3af" stroke-width="2" stroke-linecap="round"/></svg></div>';
 
-        var typeBadge = m.category_type
-            ? '<span class="med-badge med-badge--' + escHtml(m.category_type) + '">' + escHtml(m.category_type) + '</span>'
+        var catType = escCssClass(m.category_type, ['liquid', 'solid']);
+        var typeBadge = catType
+            ? '<span class="med-badge med-badge--' + catType + '">' + escHtml(m.category_type) + '</span>'
             : '';
 
         var stockBadge = inStock
@@ -227,12 +228,6 @@ var IS_CUSTOMER = <?php echo json_encode(!empty($_SESSION['user_id']) && ($_SESS
                 '</div>';
         }
         return '<a href="index.php?page=login" class="btn btn--primary btn--sm">Add to Cart</a>';
-    }
-
-    function escHtml(str) {
-        return String(str)
-            .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-            .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
 
     /* ── fetch & render ── */

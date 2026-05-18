@@ -22,7 +22,8 @@ require ROOT_PATH . '/views/ashiqur/header.php';
         <div class="confirmation-card">
             <div class="confirmation-card__header">
                 <h2>Order Receipt</h2>
-                <span class="status-badge status-badge--<?= $order['status'] ?>"><?= ucfirst($order['status']) ?></span>
+                <?php $orderStatus = e_css($order['status'], ['pending', 'accepted', 'rejected']); ?>
+                <span class="status-badge status-badge--<?= $orderStatus ?>"><?= e(ucfirst($order['status'])) ?></span>
             </div>
 
             <div class="confirmation-meta">
