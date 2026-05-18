@@ -6,6 +6,8 @@ $page = $_GET['page'] ?? 'home';
 
 if ($page === 'register') {
     register();
+}elseif ($page === 'login') {
+    login();
 } else {
-    home_index();
+    home();
 }

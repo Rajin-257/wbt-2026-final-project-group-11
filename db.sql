@@ -11,35 +11,35 @@ CREATE TABLE users (
 );
 
 CREATE TABLE categories (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     category_type ENUM('liquid', 'solid') NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE medicines (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    category_id INT UNSIGNED NOT NULL,
+    category_id INT  NOT NULL,
     vendor_name VARCHAR(255) NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
-    availability INT UNSIGNED NOT NULL DEFAULT 0 COMMENT 'stock quantity',
+    availability INT  NOT NULL DEFAULT 0 COMMENT 'stock quantity',
     description TEXT NULL,
     image_path VARCHAR(500) NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE cart (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    user_id INT UNSIGNED NOT NULL,
-    medicine_id INT UNSIGNED NOT NULL,
-    quantity INT UNSIGNED NOT NULL DEFAULT 1,
+    id INT  AUTO_INCREMENT PRIMARY KEY,
+    user_id INT  NOT NULL,
+    medicine_id INT  NOT NULL,
+    quantity INT  NOT NULL DEFAULT 1,
     added_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE orders (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    user_id INT UNSIGNED NOT NULL,
+    id INT  AUTO_INCREMENT PRIMARY KEY,
+    user_id INT  NOT NULL,
     total_amount DECIMAL(10, 2) NOT NULL,
     shipping_address TEXT NOT NULL,
     status ENUM('pending', 'accepted', 'rejected') NOT NULL DEFAULT 'pending',
@@ -48,16 +48,16 @@ CREATE TABLE orders (
 ) ;
 
 CREATE TABLE order_items (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    order_id INT UNSIGNED NOT NULL,
-    medicine_id INT UNSIGNED NOT NULL,
-    quantity INT UNSIGNED NOT NULL,
+    id INT  AUTO_INCREMENT PRIMARY KEY,
+    order_id INT  NOT NULL,
+    medicine_id INT  NOT NULL,
+    quantity INT  NOT NULL,
     unit_price DECIMAL(10, 2) NOT NULL
 );
 
 CREATE TABLE payments (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    order_id INT UNSIGNED NOT NULL,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
     amount DECIMAL(10, 2) NOT NULL,
     payment_method VARCHAR(50) NOT NULL,
     transaction_id VARCHAR(100) NULL,

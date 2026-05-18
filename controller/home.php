@@ -1,6 +1,14 @@
 <?php
 
-function home_index()
+function home()
+{
+    $title = 'Home — Medicine';
+    $view = __DIR__ . '/../views/home.php';
+    $layout = __DIR__ . '/../views/layout.php';
+    include $layout;
+}
+
+function login()
 {
     $title = 'Sign in — Medicine';
     $view = __DIR__ . '/../views/auth/login.php';
