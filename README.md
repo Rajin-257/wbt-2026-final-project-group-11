@@ -24,8 +24,12 @@ Project installation
             Now Start the Laragon Apache and mysql,
             then goto localhost/phpmyadmin then import db.sql which is added to project directory
             Now Browse on your browser localhost/wbt-2026-final-project-group-11
+
+
 Note: this installation Process for only on your local pc. If your xampp or laragon setted with diffrent port 
       you must add `{:port}` with localhost like (localhost:3000/wbt-2026-final-project-group-11)
+
+
 */-------------------------------------------------------------- 
 
 
