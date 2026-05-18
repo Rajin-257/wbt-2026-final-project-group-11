@@ -16,14 +16,12 @@ Project installation
             on htdocs.
             Now Start the xampp Apache and mysql, 
             then goto localhost/phpmyadmin then import db.sql which is added to project directory
-
             Now Browse on your browser localhost/wbt-2026-final-project-group-11
 
         For Laragon
             After install Laragon Check the www folder
             then clone the directory using git bash `git clone https://github.com/Rajin-257/wbt-2026-final-project-group-11.git`
             on www folder
-
             Now Start the Laragon Apache and mysql,
             then goto localhost/phpmyadmin then import db.sql which is added to project directory
             Now Browse on your browser localhost/wbt-2026-final-project-group-11
