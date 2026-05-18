@@ -1,3 +1,4 @@
+<?php $page = $GLOBALS['page'] ?? ($_GET['page'] ?? ''); ?>
 <div class="sidebar">
     <div class="sidebar-brand">Admin Panel</div>
     <a href="index.php?page=admin/dashboard"

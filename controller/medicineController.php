@@ -8,22 +8,32 @@ function admin_medicines() {
     $success = '';
     $edit_medicine = null;
 
-    // DELETE
-    if (isset($_GET['delete'])) {
-        $id = intval($_GET['delete']);
+    // DELETE (POST + CSRF)
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'delete') {
+        csrf_require();
+        $id = intval($_POST['id'] ?? 0);
+        $count = 0;
 
         // block delete if medicine is in a pending order
-        $check = mysqli_query($conn, "SELECT COUNT(*) FROM order_items oi 
-                                      JOIN orders o ON oi.order_id = o.id 
-                                      WHERE oi.medicine_id = $id AND o.status = 'pending'");
-        $count = mysqli_fetch_row($check)[0];
+        $check = mysqli_prepare($conn, "
+            SELECT COUNT(*) FROM order_items oi
+            JOIN orders o ON oi.order_id = o.id
+            WHERE oi.medicine_id = ? AND o.status = 'pending'
+        ");
+        mysqli_stmt_bind_param($check, 'i', $id);
+        mysqli_stmt_execute($check);
+        mysqli_stmt_bind_result($check, $count);
+        mysqli_stmt_fetch($check);
+        mysqli_stmt_close($check);
 
         if ($count > 0) {
             $error = "Cannot delete — medicine is in a pending order.";
         } else {
-            // delete image file
-            $res = mysqli_query($conn, "SELECT image_path FROM medicines WHERE id = $id");
-            $row = mysqli_fetch_assoc($res);
+            $imgStmt = mysqli_prepare($conn, 'SELECT image_path FROM medicines WHERE id = ?');
+            mysqli_stmt_bind_param($imgStmt, 'i', $id);
+            mysqli_stmt_execute($imgStmt);
+            $row = mysqli_fetch_assoc(mysqli_stmt_get_result($imgStmt));
+            mysqli_stmt_close($imgStmt);
             if ($row && $row['image_path'] && file_exists($row['image_path'])) {
                 unlink($row['image_path']);
             }
@@ -36,7 +46,8 @@ function admin_medicines() {
     }
 
     // CREATE
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'create') {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'create') {
+        csrf_require();
         $name        = trim($_POST['name']);
         $category_id = intval($_POST['category_id']);
         $vendor      = trim($_POST['vendor_name']);
@@ -75,7 +86,7 @@ function admin_medicines() {
                 $stmt = mysqli_prepare($conn, "INSERT INTO medicines 
                     (name, category_id, vendor_name, price, availability, description, image_path) 
                     VALUES (?, ?, ?, ?, ?, ?, ?)");
-                mysqli_stmt_bind_param($stmt, "sisdiis", $name, $category_id, $vendor, $price, $stock, $description, $image_path);
+                mysqli_stmt_bind_param($stmt, 'sisdiss', $name, $category_id, $vendor, $price, $stock, $description, $image_path);
                 mysqli_stmt_execute($stmt);
                 $success = "Medicine added successfully.";
             }
@@ -83,7 +94,8 @@ function admin_medicines() {
     }
 
     // UPDATE
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update') {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'update') {
+        csrf_require();
         $id          = intval($_POST['id']);
         $name        = trim($_POST['name']);
         $category_id = intval($_POST['category_id']);

@@ -2,7 +2,8 @@
 <html>
 <head>
     <title>Orders — Admin</title>
-    <link rel="stylesheet" href="public/css/admin.css">
+    <link rel="stylesheet" href="public/admin.css">
+    <?php include __DIR__ . '/../partials/csrf_head.php'; ?>
 </head>
 <body>
 
@@ -32,15 +33,16 @@
                     <?php foreach ($orders as $order): ?>
                     <tr id="order-row-<?= $order['id'] ?>">
                         <td><?= $order['id'] ?></td>
-                        <td><?= htmlspecialchars($order['customer_name']) ?></td>
+                        <td><?= e($order['customer_name']) ?></td>
                         <td><?= $order['total_amount'] ?> BDT</td>
-                        <td><?= htmlspecialchars($order['shipping_address']) ?></td>
-                        <td><?= htmlspecialchars($order['payment_method']) ?></td>
+                        <td><?= e($order['shipping_address']) ?></td>
+                        <td><?= e($order['payment_method']) ?></td>
                         <td><?= $order['order_date'] ?></td>
                         <td>
-                            <span class="badge badge-<?= $order['status'] ?>"
+                            <?php $orderStatus = e_css($order['status'], ['pending', 'accepted', 'rejected']); ?>
+                            <span class="badge badge-<?= $orderStatus ?>"
                                   id="badge-<?= $order['id'] ?>">
-                                <?= ucfirst($order['status']) ?>
+                                <?= e(ucfirst($order['status'])) ?>
                             </span>
                         </td>
                         <td>
@@ -69,8 +71,9 @@
 function updateStatus(orderId, status) {
     if (!confirm('Mark this order as ' + status + '?')) return;
 
-    fetch('index.php?page=admin/orders/update-status', {
+    fetch('index.php?page=admin/order-status', {
         method: 'POST',
+        credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ order_id: orderId, status: status })
     })
@@ -78,8 +81,10 @@ function updateStatus(orderId, status) {
     .then(function(data) {
         if (data.success) {
             var badge = document.getElementById('badge-' + orderId);
-            badge.textContent = data.status.charAt(0).toUpperCase() + data.status.slice(1);
-            badge.className   = 'badge badge-' + data.status;
+            var allowed = ['pending', 'accepted', 'rejected'];
+            var safeStatus = allowed.indexOf(data.status) !== -1 ? data.status : 'pending';
+            badge.className   = 'badge badge-' + safeStatus;
+            badge.textContent = safeStatus.charAt(0).toUpperCase() + safeStatus.slice(1);
 
             var row = document.getElementById('order-row-' + orderId);
             row.querySelector('td:last-child').innerHTML = '<span>—</span>';

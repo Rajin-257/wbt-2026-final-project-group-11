@@ -2,7 +2,8 @@
 <html>
 <head>
     <title>Categories — Admin</title>
-    <link rel="stylesheet" href="public/css/admin.css">
+    <link rel="stylesheet" href="public/admin.css">
+    <?php include __DIR__ . '/../partials/csrf_head.php'; ?>
 </head>
 <body>
 
@@ -12,13 +13,14 @@
     <div class="container">
         <h1>Category Management</h1>
 
-        <?php if ($error):   ?><div class="error"><?= htmlspecialchars($error) ?></div><?php endif; ?>
-        <?php if ($success): ?><div class="success"><?= htmlspecialchars($success) ?></div><?php endif; ?>
+        <?php if ($error):   ?><div class="error"><?= e($error) ?></div><?php endif; ?>
+        <?php if ($success): ?><div class="success"><?= e($success) ?></div><?php endif; ?>
 
         <div class="form-box">
             <h3><?= $edit_category ? 'Edit Category' : 'Add New Category' ?></h3>
             <form method="POST" action="index.php?page=admin/categories"
                   onsubmit="return validateCategoryForm()">
+                <?= csrf_field() ?>
                 <input type="hidden" name="action"
                        value="<?= $edit_category ? 'update' : 'create' ?>">
                 <?php if ($edit_category): ?>
@@ -27,7 +29,7 @@
 
                 <label>Category Name</label>
                 <input type="text" name="name" id="cat_name"
-                       value="<?= $edit_category ? htmlspecialchars($edit_category['name']) : '' ?>"
+                       value="<?= $edit_category ? e($edit_category['name']) : '' ?>"
                        placeholder="e.g. Paracetamol genre">
 
                 <label>Type</label>
@@ -64,15 +66,19 @@
                     <?php foreach ($categories as $cat): ?>
                     <tr>
                         <td><?= $cat['id'] ?></td>
-                        <td><?= htmlspecialchars($cat['name']) ?></td>
-                        <td><?= htmlspecialchars($cat['category_type']) ?></td>
+                        <td><?= e($cat['name']) ?></td>
+                        <td><?= e($cat['category_type']) ?></td>
                         <td><?= $cat['created_at'] ?></td>
                         <td>
                             <a href="index.php?page=admin/categories&edit=<?= $cat['id'] ?>"
                                class="btn btn-warning">Edit</a>
-                            <a href="index.php?page=admin/categories&delete=<?= $cat['id'] ?>"
-                               class="btn btn-danger"
-                               onclick="return confirm('Delete this category?')">Delete</a>
+                            <form method="POST" action="index.php?page=admin/categories" class="inline-form"
+                                  onsubmit="return confirm('Delete this category?')">
+                                <?= csrf_field() ?>
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="id" value="<?= (int) $cat['id'] ?>">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
                         </td>
                     </tr>
                     <?php endforeach; ?>

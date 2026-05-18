@@ -2,7 +2,8 @@
 <html>
 <head>
     <title>Dashboard — Admin</title>
-    <link rel="stylesheet" href="public/css/admin.css">
+    <link rel="stylesheet" href="public/admin.css">
+    <?php include __DIR__ . '/../partials/csrf_head.php'; ?>
 </head>
 <body>
 
