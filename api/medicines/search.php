@@ -5,10 +5,10 @@ header('Content-Type: application/json; charset=utf-8');
 
 require_once __DIR__ . '/../../config/db.php';
 
-$q      = trim($_GET['q']      ?? '');
-$vendor = trim($_GET['vendor'] ?? '');
-$genre  = trim($_GET['genre']  ?? '');   // category id or empty
-$type   = trim($_GET['type']   ?? '');   // liquid | solid | empty
+$q      = trim($_GET['q']?? '');
+$vendor = trim($_GET['vendor']?? '');
+$genre  = trim($_GET['genre']?? '');   // category id or empty
+$type   = trim($_GET['type']?? '');   // liquid | solid | empty
 
 $conn = getConnection();
 
@@ -60,9 +60,9 @@ mysqli_close($conn);
 
 // numeric strings → proper types
 foreach ($medicines as &$m) {
-    $m['id']           = (int)$m['id'];
+    $m['id'] = (int)$m['id'];
     $m['category_id']  = (int)$m['category_id'];
-    $m['price']        = (float)$m['price'];
+    $m['price'] = (float)$m['price'];
     $m['availability'] = (int)$m['availability'];
 }
 unset($m);

@@ -4,14 +4,14 @@
  * CSRF protection — session token, form fields, and X-CSRF-Token header for AJAX.
  */
 
-function csrf_ensure_session(): void
+function csrf_ensure_session()
 {
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
 }
 
-function csrf_token(): string
+function csrf_token()
 {
     csrf_ensure_session();
     if (empty($_SESSION['_csrf_token'])) {
@@ -26,17 +26,17 @@ function csrf_regenerate(): void
     $_SESSION['_csrf_token'] = bin2hex(random_bytes(32));
 }
 
-function csrf_field(): string
+function csrf_field()
 {
     return '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">';
 }
 
-function csrf_meta(): string
+function csrf_meta()
 {
     return '<meta name="csrf-token" content="' . e(csrf_token()) . '">';
 }
 
-function csrf_get_submitted_token(): ?string
+function csrf_get_submitted_token()
 {
     if (!empty($_POST['_csrf'])) {
         return (string) $_POST['_csrf'];
@@ -56,7 +56,7 @@ function csrf_get_submitted_token(): ?string
     return null;
 }
 
-function csrf_verify(): bool
+function csrf_verify()
 {
     csrf_ensure_session();
     $stored    = $_SESSION['_csrf_token'] ?? '';
@@ -67,7 +67,7 @@ function csrf_verify(): bool
         && hash_equals($stored, $submitted);
 }
 
-function csrf_require(): void
+function csrf_require()
 {
     if (csrf_verify()) {
         return;
@@ -95,7 +95,7 @@ function csrf_require(): void
     exit;
 }
 
-function csrf_take_flash_error(): string
+function csrf_take_flash_error()
 {
     csrf_ensure_session();
     $msg = $_SESSION['csrf_error'] ?? '';
