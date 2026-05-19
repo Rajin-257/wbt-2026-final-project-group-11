@@ -161,7 +161,7 @@
      color: #374151; 
      margin-bottom: 0.35rem; 
 }
-.auth-field input,
+.auth-field,
 .auth-field select {
     width: 100%;
     box-sizing: border-box;
@@ -170,12 +170,12 @@
     border-radius: 8px;
     font-size: 1rem;
 }
-.auth-field input:focus,
+/* .auth-field input:focus,
 .auth-field select:focus {
     outline: none;
     border-color: #2563eb;
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-}
+} */
 .auth-row {
     display: flex;
     align-items: center;

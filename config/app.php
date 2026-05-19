@@ -7,7 +7,7 @@ if (!defined('ROOT_PATH')) {
 }
 
 if (!function_exists('app_base_url')) {
-    function app_base_url(): string
+    function app_base_url()
     {
         $dir = dirname(str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? ''));
         if (basename($dir) === 'api') {
@@ -23,7 +23,7 @@ if (!defined('BASE_URL')) {
 
 /** Escape text for HTML body, attributes, and quoted contexts. */
 if (!function_exists('e')) {
-    function e(?string $value): string
+    function e(?string $value)
     {
         return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
     }
@@ -31,7 +31,7 @@ if (!function_exists('e')) {
 
 /** Escape a relative URL for use in href/src (blocks javascript: and data: URIs). */
 if (!function_exists('e_url')) {
-    function e_url(?string $path): string
+    function e_url(?string $path)
     {
         $path = trim((string) $path);
         if ($path === '') {
@@ -49,7 +49,7 @@ if (!function_exists('e_url')) {
 
 /** Safe CSS class fragment; optional whitelist for enum values (role, status, type). */
 if (!function_exists('e_css')) {
-    function e_css(?string $value, array $allowed = []): string
+    function e_css(?string $value, array $allowed = [])
     {
         $value = (string) $value;
         if ($allowed !== []) {

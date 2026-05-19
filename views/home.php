@@ -193,9 +193,9 @@ var IS_CUSTOMER = <?php echo json_encode(!empty($_SESSION['user_id']) && ($_SESS
     /*  card template  */
     function renderCard(m) {
         var inStock  = m.availability > 0;
-        var img      = m.image_path
+        var img = m.image_path
             ? '<img src="' + escUrl(m.image_path) + '" alt="' + escHtml(m.name) + '" class="med-card__img" loading="lazy">'
-            : '<div class="med-card__img-placeholder"><svg viewBox="0 0 48 48" fill="none" width="40" height="40"><rect x="8" y="14" width="32" height="22" rx="3" stroke="#d1d5db" stroke-width="2"/><path d="M24 20v10M19 25h10" stroke="#9ca3af" stroke-width="2" stroke-linecap="round"/></svg></div>';
+            : '<div class="med-card__img-placeholder"></div>';
 
         var catType = escCssClass(m.category_type, ['liquid', 'solid']);
         var typeBadge = catType
